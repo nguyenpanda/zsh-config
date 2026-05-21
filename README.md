@@ -1,68 +1,121 @@
 # 🚀 Professional Zsh Configuration
 
-A modular, performant, and professional Zsh configuration tailored for macOS (M-series) and engineered for portability.
+[![Zsh Version](https://img.shields.io/badge/zsh-v5.9%2B-blue)](https://www.zsh.org/)
+[![macOS](https://img.shields.io/badge/platform-macOS-lightgrey)](https://apple.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A high-performance, modular, and XDG-compliant Zsh configuration. Tailored for macOS power users and engineered for seamless cross-machine synchronization.
+
+---
+
+## 📑 Table of Contents
+
+- [Architecture](#-architecture)
+- [Key Features](#-key-features)
+- [Installation](#-installation)
+- [Key Bindings](#-key-bindings)
+- [Maintenance](#-maintenance)
+
+---
 
 ## 🏗️ Architecture
 
-This setup moves away from a monolithic \`.zshrc\` in favor of a clean, modular structure:
+This configuration adopts a modular design, decoupling core logic from environment-specific settings.
 
-- **\`.zshrc\`**: The main entry point, handling Oh My Zsh and theme initialization.
-- **\`.zshenv\`**: Defines XDG base directories and optimizes \`\$PATH\`/\`\$FPATH\`.
-- **\`aliases.zsh\`**: Centralized command shortcuts and robust tool overrides.
-- **\`env.zsh\`**: Compilation flags and environment-specific variables.
-- **\`fzf.zsh\`**: Advanced fuzzy finder integration with Mac-specific fixes.
-- **\`tools.zsh\`**: Custom utility functions (like the plugin updater).
+| File | Responsibility |
+| :--- | :--- |
+| **`.zshrc`** | Main initialization and plugin orchestration. |
+| **`.zshenv`** | Global environment variables and XDG directory definitions. |
+| **`aliases.zsh`** | Command shortcuts and robust tool abstractions. |
+| **`fzf.zsh`** | Advanced fuzzy finder logic and Mac-specific keyboard patches. |
+| **`tools.zsh`** | Custom utility functions and lifecycle management scripts. |
+| **`env.zsh`** | Machine-level compilation flags and path exports. |
+
+---
 
 ## ✨ Key Features
 
-- **XDG Compliance**: Keeps your \`\$HOME\` clean by moving \`.zcompdump\` and history to \`~/.cache\` and \`~/.local\`.
-- **Auto-Bootstrapping**: 
-  - Automatically clones **Powerlevel10k**, **zsh-autosuggestions**, and **zsh-syntax-highlighting** if they are missing.
-  - No manual cloning or Homebrew required for themes/plugins.
-- **Professional FZF Integration**: 
-  - Modern \`fzf --zsh\` integration.
-  - Native support for **Mac Option (⌥) Keys** without terminal configuration.
-  - Interactive previews using \`bat\` and fast searching via \`fd\`.
-- **Custom Plugin Updater**: Use \`uzp\` (or \`update_zsh_plugins\`) to keep all your custom Git plugins up to date.
-- **Optimized Startup**: Consolidated \`compinit\` calls and intelligent sourcing order for maximum speed.
+### 🛡️ XDG Compliance
+
+Keep your `$HOME` directory pristine. All transient data is redirected:
+
+- **Cache**: `$XDG_CACHE_HOME/zsh` (Completion dumps, etc.)
+- **State**: `$XDG_STATE_HOME/zsh` (Command history)
+
+### ⚡ Auto-Bootstrapping
+
+Zero-effort deployment. On first launch, the configuration automatically clones:
+
+- [Powerlevel10k](https://github.com/romkatv/powerlevel10k) (Theme)
+- [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
+- [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
+
+### 🔍 Professional FZF Integration
+
+- **Modern Core**: Built on the native `fzf --zsh` integration.
+- **Mac Hardware Fixes**: Native support for **Option (⌥) Key** shortcuts (Option+C, Option+T) without needing terminal-specific configuration.
+- **Rich Previews**: Real-time file previews powered by `bat`.
+
+### 🛠️ Plugin Lifecycle Management
+
+Includes a custom `update_zsh_plugins` utility (alias: `uzp`) to programmatically update all custom Git-based plugins with rebase and autostash protection.
+
+---
 
 ## 🛠️ Installation
 
 ### 1. Prerequisites
-Ensure you have the following CLI tools installed (Homebrew is recommended):
-\`\`\`bash
+
+Install the core toolset via Homebrew:
+
+```bash
 brew install fzf fd bat zoxide ripgrep eza
-\`\`\`
+```
 
-### 2. Setup
-1. **Clone this repository** into your config folder:
-   \`\`\`bash
-   git clone <your-repo-url> ~/.config/zsh
-   \`\`\`
+### 2. Deployment
 
-2. **Symlink the entry points**:
-   \`\`\`bash
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/nguyenpanda/zsh-config.git ~/.config/zsh
+   ```
+
+2. **Establish entry points**:
+
+   ```bash
    ln -sf ~/.config/zsh/.zshrc ~/.zshrc
    ln -sf ~/.config/zsh/.zshenv ~/.zshenv
-   \`\`\`
+   ```
 
-3. **Install Oh My Zsh** (if not already present):
-   \`\`\`bash
-   sh -c "\$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-   \`\`\`
+3. **Initialize Oh My Zsh**:
 
-4. **Restart your terminal**: The config will automatically clone Powerlevel10k and required plugins on the first run.
+   ```bash
+   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+   ```
 
-## ⌨️ Shortcuts
-
-| Key | Action |
-|-----|--------|
-| \`Option + C\` | Fuzzy search directories and \`cd\` |
-| \`Option + T\` | Fuzzy search files |
-| \`Option + F\` | **Custom**: Clean file picker (excludes hidden/git) |
-| \`Ctrl + R\` | Fuzzy search command history |
-| \`uzp\` | Update all custom Zsh plugins |
-| \`szsh\` | Reload Zsh configuration |
+4. **Launch**: Restart your terminal. The configuration will handle the rest.
 
 ---
-*Maintained by nguyenpanda*
+
+## ⌨️ Key Bindings
+
+| Shortcut | Action | Tool |
+| :--- | :--- | :--- |
+| **`Option + C`** | Fuzzy search directories and `cd` | `fzf` + `fd` |
+| **`Option + T`** | Fuzzy search all files | `fzf` + `fd` |
+| **`Option + F`** | **Custom**: Search non-hidden project files | `fzf` + `fd` |
+| **`Ctrl + R`** | Interactive history search | `fzf` |
+| **`Ctrl + F`** | Shortcut to custom file picker | `fzf` |
+
+---
+
+## 🧹 Maintenance
+
+Use the following aliases to manage your environment:
+
+- `uzp`: Update all custom Git-based plugins.
+- `szsh`: Instantly reload the shell configuration.
+
+---
+
+*Maintained with ❤️ by nguyenpanda*
