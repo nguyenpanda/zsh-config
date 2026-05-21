@@ -1,0 +1,27 @@
+# Ignore all completion dumps and cache
+.zcompdump*
+.zcompdump-*
+.zsh-update
+.zcompdump.zwc
+.zsh_sessions/
+.zcompdump
+
+# Ignore machine-specific files
+.p10k.zsh
+.p10k.zsh.bak
+.p10k.zsh.zwc
+
+# Ignore secret or local-only environment files
+.env
+.local.zsh
+.local/
+
+# Oh My Zsh internals that shouldn't be tracked (assuming you clone OMZ separately)
+.oh-my-zsh/
+
+# macOS system files
+.DS_Store
+
+# Ignore any zsh-specific state or history (if stored here)
+history
+.zsh_history
