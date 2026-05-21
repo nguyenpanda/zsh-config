@@ -16,18 +16,20 @@ This setup moves away from a monolithic \`.zshrc\` in favor of a clean, modular 
 ## ✨ Key Features
 
 - **XDG Compliance**: Keeps your \`\$HOME\` clean by moving \`.zcompdump\` and history to \`~/.cache\` and \`~/.local\`.
+- **Auto-Bootstrapping**: 
+  - Automatically clones **Powerlevel10k**, **zsh-autosuggestions**, and **zsh-syntax-highlighting** if they are missing.
+  - No manual cloning or Homebrew required for themes/plugins.
 - **Professional FZF Integration**: 
   - Modern \`fzf --zsh\` integration.
   - Native support for **Mac Option (⌥) Keys** without terminal configuration.
   - Interactive previews using \`bat\` and fast searching via \`fd\`.
 - **Custom Plugin Updater**: Use \`uzp\` (or \`update_zsh_plugins\`) to keep all your custom Git plugins up to date.
 - **Optimized Startup**: Consolidated \`compinit\` calls and intelligent sourcing order for maximum speed.
-- **Portable**: Includes a \`.gitignore\` designed to keep machine-specific state out of your repository.
 
 ## 🛠️ Installation
 
 ### 1. Prerequisites
-Ensure you have the following tools installed (Homebrew is recommended):
+Ensure you have the following CLI tools installed (Homebrew is recommended):
 \`\`\`bash
 brew install fzf fd bat zoxide ripgrep eza
 \`\`\`
@@ -49,6 +51,8 @@ brew install fzf fd bat zoxide ripgrep eza
    sh -c "\$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
    \`\`\`
 
+4. **Restart your terminal**: The config will automatically clone Powerlevel10k and required plugins on the first run.
+
 ## ⌨️ Shortcuts
 
 | Key | Action |
@@ -59,12 +63,6 @@ brew install fzf fd bat zoxide ripgrep eza
 | \`Ctrl + R\` | Fuzzy search command history |
 | \`uzp\` | Update all custom Zsh plugins |
 | \`szsh\` | Reload Zsh configuration |
-
-## 📦 Custom Plugins
-This setup is optimized for:
-- \`zsh-autosuggestions\`
-- \`zsh-syntax-highlighting\`
-- \`powerlevel10k\`
 
 ---
 *Maintained by nguyenpanda*
