@@ -53,6 +53,9 @@ alias vim='nvim'
 alias szsh='source $ZDOTDIR/.zshrc'
 alias uzp='update_zsh_plugins'
 
+alias macinfo="system_profiler SPHardwareDataType SPDisplaysDataType SPSoftwareDataType SPStorageDataType"
+alias topo='lstopo --whole-io --physical --verbose --output-format'
+
 # python
 alias python='python3'
 alias pip='pip3'

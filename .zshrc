@@ -44,7 +44,7 @@ plugins=(
   git
   docker
   docker-compose
-  ssh-agent
+  # ssh-agent
   macos
   extract
 
@@ -83,12 +83,9 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 source "$ZDOTDIR/env.zsh"
 source "$ZDOTDIR/aliases.zsh"
 source "$ZDOTDIR/tools.zsh"
+source "$ZDOTDIR/cmd.zsh"
+source "$ZDOTDIR/zsh_hook.zsh"
 source "$ZDOTDIR/fzf.zsh"
-
-# Syntax Highlighting (Must be last)
-# if [[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
-#   source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-# fi
 
 # Powerlevel10k Theme (Must be after syntax highlighting or at least at the end)
 [[ ! -f "$ZDOTDIR/.p10k.zsh" ]] || source "$ZDOTDIR/.p10k.zsh"

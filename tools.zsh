@@ -3,6 +3,10 @@ if command -v zoxide >/dev/null 2>&1; then
   eval "$(zoxide init zsh)"
 fi
 
+# tmpl
+eval "$(register-python-argcomplete tmpl)"
+
+# ZSH plugins
 update_zsh_plugins() {
   local zsh_custom="${ZSH_CUSTOM:-${ZSH:-$ZDOTDIR/.oh-my-zsh}/custom}"
   local plugin_dir="$zsh_custom/plugins"
