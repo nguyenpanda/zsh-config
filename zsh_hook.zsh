@@ -6,7 +6,11 @@ _auto_venv() {
     
     if [[ "$PWD" != "$venv_parent" && "$PWD" != "$venv_parent"/* ]]; then
       echo "🐍 Leaving Python virtual environment."
-      deactivate
+      if (( $+functions[deactivate] )); then
+        deactivate
+      else
+        unset VIRTUAL_ENV
+      fi
     fi
   fi
 
@@ -17,4 +21,3 @@ _auto_venv() {
 }
 
 add-zsh-hook chpwd _auto_venv
-

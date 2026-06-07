@@ -48,6 +48,7 @@ alias dl='cd ~/Downloads'
 alias cdds="cd /Users/Shared"
 
 # Tools
+alias rm='trash'
 alias code='code .'
 alias vim='nvim'
 alias szsh='source $ZDOTDIR/.zshrc'
