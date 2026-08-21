@@ -33,6 +33,7 @@ if [[ -n "$ZSH_VERSION" ]]; then
     path=(
         "$HOME/bin"
         "$HOME/.local/bin"
+        "$HOME/.cargo/bin"
         "/usr/local/bin"
         "/usr/local/sbin"
         "$HOME/.lmstudio/bin"
@@ -60,7 +61,7 @@ if [[ -n "$ZSH_VERSION" ]]; then
         $fpath
     )
 else
-    export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$HOME/.lmstudio/bin:$PATH"
+    export PATH="$HOME/bin:$HOME/.local/bin:$HOME/.cargo/bin:/usr/local/bin:/usr/local/sbin:$HOME/.lmstudio/bin:$PATH"
     if [[ "$OSTYPE" == "darwin"* ]]; then
         export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/llvm/bin:$PATH"
     elif [[ -d "/home/linuxbrew/.linuxbrew" ]]; then
