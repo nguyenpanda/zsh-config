@@ -84,7 +84,7 @@ sudo apt install fzf fd-find bat zoxide ripgrep eza trash-cli
 sudo dnf install epel-release -y
 
 # Install core packages (Note: eza is not natively in RHEL 8, use cargo to install it if needed)
-sudo dnf install fzf fd-find bat zoxide ripgrep trash-cli
+sudo dnf install zsh git fzf fd-find bat zoxide ripgrep trash-cli
 ```
 
 ### 2. Deployment
@@ -102,7 +102,12 @@ sudo dnf install fzf fd-find bat zoxide ripgrep trash-cli
    ln -sf ~/.config/zsh/.zshenv ~/.zshenv
    ```
 
-3. **Launch**: Restart your terminal.
+3. **Launch**: Change your default shell to Zsh and start it:
+
+   ```bash
+   chsh -s $(which zsh)
+   zsh
+   ```
 
 ---
 
