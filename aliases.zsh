@@ -55,6 +55,7 @@ alias szsh='source $ZDOTDIR/.zshrc'
 alias uzp='update_zsh_plugins'
 
 alias macinfo="system_profiler SPHardwareDataType SPDisplaysDataType SPSoftwareDataType SPStorageDataType"
+# Example: topo txt > cpu.txt
 alias topo='lstopo --whole-io --physical --verbose --output-format'
 
 # python

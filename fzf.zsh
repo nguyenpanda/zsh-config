@@ -12,9 +12,9 @@ source <(fzf --zsh)
 
 # Use fd if available for faster file searching
 if command -v fd >/dev/null 2>&1; then
-  export FZF_DEFAULT_COMMAND='fd --type f --hidden --strip-cwd-prefix --exclude .git'
+  export FZF_DEFAULT_COMMAND="fd --type f --hidden --strip-cwd-prefix --exclude $FD_EXCLUDES"
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-  export FZF_ALT_C_COMMAND='fd --type d --hidden --strip-cwd-prefix --exclude .git'
+  export FZF_ALT_C_COMMAND="fd --type d --hidden --strip-cwd-prefix --exclude $FD_EXCLUDES"
 fi
 
 # UI & Appearance
@@ -46,7 +46,7 @@ export FZF_CTRL_T_OPTS="--preview '$_FZF_PREVIEW_CMD'"
 _fzf_file_no_hidden() {
   local cmd result
   if command -v fd >/dev/null 2>&1; then
-    cmd="fd --type f --strip-cwd-prefix --exclude .git"
+    cmd="fd --type f --strip-cwd-prefix $FD_EXCLUDES"
   else
     cmd="find . -maxdepth 4 -type f"
   fi
