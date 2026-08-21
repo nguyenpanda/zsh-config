@@ -11,7 +11,7 @@ hw() {
     S_CORES=$(sysctl -n hw.perflevel0.physicalcpu)
     P_CORES=$(sysctl -n hw.perflevel1.physicalcpu)
     TOTAL_CORES=$(sysctl -n hw.physicalcpu)
-    echo "Cores: $TOTAL_CORES Total ($P_CORES Super, $E_CORES Performance)"
+    echo "Cores: $TOTAL_CORES Total ($S_CORES Super, $P_CORES Performance)"
 
     L1I=$(sysctl -n hw.perflevel0.l1icachesize | awk '{print $0/1024" KB"}')
     L1D=$(sysctl -n hw.perflevel0.l1dcachesize | awk '{print $0/1024" KB"}')

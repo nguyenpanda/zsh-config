@@ -5,27 +5,14 @@ fi
 
 # ========== Oh My Zsh Configuration ==========
 export ZSH="$ZDOTDIR/.oh-my-zsh"
+export ZSH_CUSTOM="$ZDOTDIR/omz-custom"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Move .zcompdump to cache directory
 export ZSH_COMPDUMP="$XDG_CACHE_HOME/zsh/zcompdump"
 
-# --- Auto-Bootstrap Plugins & Themes ---
-# Installs Powerlevel10k and custom plugins if they are missing
-if [[ ! -d "${ZSH_CUSTOM:-$ZSH/custom}/themes/powerlevel10k" ]]; then
-  echo "Installing Powerlevel10k..."
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$ZSH/custom}/themes/powerlevel10k"
-fi
-
-if [[ ! -d "${ZSH_CUSTOM:-$ZSH/custom}/plugins/zsh-autosuggestions" ]]; then
-  echo "Installing zsh-autosuggestions..."
-  git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-$ZSH/custom}/plugins/zsh-autosuggestions"
-fi
-
-if [[ ! -d "${ZSH_CUSTOM:-$ZSH/custom}/plugins/zsh-syntax-highlighting" ]]; then
-  echo "Installing zsh-syntax-highlighting..."
-  git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-$ZSH/custom}/plugins/zsh-syntax-highlighting"
-fi
+# --- Plugins & Themes ---
+# Managed via Git Submodules
 
 # OMZ Settings
 zstyle ':omz:update' mode auto

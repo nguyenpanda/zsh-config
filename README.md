@@ -42,10 +42,11 @@ Keep your `$HOME` directory pristine. All transient data is redirected:
 - **Cache**: `$XDG_CACHE_HOME/zsh` (Completion dumps, etc.)
 - **State**: `$XDG_STATE_HOME/zsh` (Command history)
 
-### ⚡ Auto-Bootstrapping
+### ⚡ Git Submodules
 
-Zero-effort deployment. On first launch, the configuration automatically clones:
+Plugins and themes are robustly managed via Git submodules, ensuring locked versions and deterministic setups across machines:
 
+- [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh)
 - [Powerlevel10k](https://github.com/romkatv/powerlevel10k) (Theme)
 - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
 - [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
@@ -69,7 +70,7 @@ Includes a custom `update_zsh_plugins` utility (alias: `uzp`) to programmaticall
 Install the core toolset via Homebrew:
 
 ```bash
-brew install fzf fd bat zoxide ripgrep eza
+brew install fzf fd bat zoxide ripgrep eza trash
 ```
 
 ### 2. Deployment
@@ -77,7 +78,7 @@ brew install fzf fd bat zoxide ripgrep eza
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/nguyenpanda/zsh-config.git ~/.config/zsh
+   git clone --recurse-submodules https://github.com/nguyenpanda/zsh-config.git ~/.config/zsh
    ```
 
 2. **Establish entry points**:
@@ -87,13 +88,7 @@ brew install fzf fd bat zoxide ripgrep eza
    ln -sf ~/.config/zsh/.zshenv ~/.zshenv
    ```
 
-3. **Initialize Oh My Zsh**:
-
-   ```bash
-   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-   ```
-
-4. **Launch**: Restart your terminal. The configuration will handle the rest.
+3. **Launch**: Restart your terminal.
 
 ---
 

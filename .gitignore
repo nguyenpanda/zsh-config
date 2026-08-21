@@ -16,9 +16,6 @@
 .local.zsh
 .local/
 
-# Oh My Zsh internals that shouldn't be tracked (assuming you clone OMZ separately)
-.oh-my-zsh/
-
 # macOS system files
 .DS_Store
 

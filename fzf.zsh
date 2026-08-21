@@ -31,9 +31,9 @@ export FZF_DEFAULT_OPTS='
 
 # Preview command using bat if available
 if command -v bat >/dev/null 2>&1; then
-  export _FZF_PREVIEW_CMD='bat --color=always --style=plain,numbers --line-range=:500 {}'
+  export _FZF_PREVIEW_CMD='bat --color=always --style=numbers,changes --line-range=:500 {}'
 elif command -v batcat >/dev/null 2>&1; then
-  export _FZF_PREVIEW_CMD='batcat --color=always --style=plain,numbers --line-range=:500 {}'
+  export _FZF_PREVIEW_CMD='batcat --color=always --style=numbers,changes --line-range=:500 {}'
 else
   export _FZF_PREVIEW_CMD='cat {}'
 fi
