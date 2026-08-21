@@ -12,9 +12,9 @@ source <(fzf --zsh)
 
 # Use fd if available for faster file searching
 if command -v fd >/dev/null 2>&1; then
-  export FZF_DEFAULT_COMMAND="fd --type f --hidden --strip-cwd-prefix --exclude $FD_EXCLUDES"
+  export FZF_DEFAULT_COMMAND="fd --type f --hidden --strip-cwd-prefix $FD_EXCLUDES"
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-  export FZF_ALT_C_COMMAND="fd --type d --hidden --strip-cwd-prefix --exclude $FD_EXCLUDES"
+  export FZF_ALT_C_COMMAND="fd --type d --hidden --strip-cwd-prefix $FD_EXCLUDES"
 fi
 
 # UI & Appearance
