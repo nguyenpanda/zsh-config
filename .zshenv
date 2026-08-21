@@ -30,14 +30,26 @@ if [[ -n "$ZSH_VERSION" ]]; then
     path=(
         "$HOME/bin"
         "$HOME/.local/bin"
-        "/opt/homebrew/bin"
-        "/opt/homebrew/sbin"
         "/usr/local/bin"
         "/usr/local/sbin"
-        "/opt/homebrew/opt/llvm/bin"
         "$HOME/.lmstudio/bin"
         $path
     )
+    
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        path=(
+            "/opt/homebrew/bin"
+            "/opt/homebrew/sbin"
+            "/opt/homebrew/opt/llvm/bin"
+            $path
+        )
+    elif [[ -d "/home/linuxbrew/.linuxbrew" ]]; then
+        path=(
+            "/home/linuxbrew/.linuxbrew/bin"
+            "/home/linuxbrew/.linuxbrew/sbin"
+            $path
+        )
+    fi
 
     typeset -U fpath
     fpath=(
@@ -45,7 +57,12 @@ if [[ -n "$ZSH_VERSION" ]]; then
         $fpath
     )
 else
-    export PATH="$HOME/bin:$HOME/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:/opt/homebrew/opt/llvm/bin:$HOME/.lmstudio/bin:$PATH"
+    export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$HOME/.lmstudio/bin:$PATH"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/llvm/bin:$PATH"
+    elif [[ -d "/home/linuxbrew/.linuxbrew" ]]; then
+        export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
+    fi
 fi
 
 if [[ -f "$HOME/.local/bin/env" ]]; then

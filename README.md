@@ -67,10 +67,24 @@ Includes a custom `update_zsh_plugins` utility (alias: `uzp`) to programmaticall
 
 ### 1. Prerequisites
 
-Install the core toolset via Homebrew:
-
+**macOS (via Homebrew):**
 ```bash
 brew install fzf fd bat zoxide ripgrep eza trash
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+sudo apt update
+sudo apt install fzf fd-find bat zoxide ripgrep eza trash-cli
+```
+
+**Linux (Rocky/RHEL/Fedora):**
+```bash
+# Enable EPEL (Required for many tools)
+sudo dnf install epel-release -y
+
+# Install core packages (Note: eza is not natively in RHEL 8, use cargo to install it if needed)
+sudo dnf install fzf fd-find bat zoxide ripgrep trash-cli
 ```
 
 ### 2. Deployment

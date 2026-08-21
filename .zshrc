@@ -32,13 +32,17 @@ plugins=(
   docker
   docker-compose
   # ssh-agent
-  macos
   extract
 
   # Custom
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
+
+# OS-Specific Plugins
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  plugins+=(macos)
+fi
 
 # Load Oh My Zsh
 source "$ZSH/oh-my-zsh.sh"

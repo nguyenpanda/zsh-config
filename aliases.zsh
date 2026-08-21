@@ -45,7 +45,6 @@ alias du='du -h'
 alias desk='cd ~/Desktop'
 alias docs='cd ~/Documents'
 alias dl='cd ~/Downloads'
-alias cdds="cd /Users/Shared"
 
 # Tools
 alias rm='trash'
@@ -54,7 +53,20 @@ alias vim='nvim'
 alias szsh='source $ZDOTDIR/.zshrc'
 alias uzp='update_zsh_plugins'
 
-alias macinfo="system_profiler SPHardwareDataType SPDisplaysDataType SPSoftwareDataType SPStorageDataType"
+# Platform specific aliases
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    alias cdds="cd /Users/Shared"
+    alias macinfo="system_profiler SPHardwareDataType SPDisplaysDataType SPSoftwareDataType SPStorageDataType"
+else
+    # Linux Equivalents
+    if command -v xclip >/dev/null 2>&1; then
+        alias pbcopy="xclip -selection clipboard"
+        alias pbpaste="xclip -selection clipboard -o"
+    elif command -v xsel >/dev/null 2>&1; then
+        alias pbcopy="xsel --clipboard --input"
+        alias pbpaste="xsel --clipboard --output"
+    fi
+fi
 # Example: topo txt > cpu.txt
 alias topo='lstopo --whole-io --physical --verbose --output-format'
 
