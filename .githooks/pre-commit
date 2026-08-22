@@ -1,0 +1,57 @@
+#!/bin/sh
+# .githooks/pre-commit — refuse to commit obvious credentials.
+#
+# Enabled by the installer via `git config core.hooksPath .githooks`.
+#
+# This is a safety net, not the protection: local.zsh, secrets.zsh and .note/
+# are gitignored, which is what actually keeps secrets out. The hook exists to
+# catch a `git add -f` made in a hurry.
+#
+# Bypass deliberately with:  git commit --no-verify
+
+set -u
+
+# Only look at what is actually staged, and only at added/changed lines.
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+[ -n "$staged" ] || exit 0
+
+# Patterns: OpenAI/Anthropic-style keys, GitHub tokens, AWS access key ids,
+# Slack tokens, Google API keys, and any PEM private key block.
+pattern='(sk-[A-Za-z0-9_-]{16,}|gh[pousr]_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|xox[abprs]-[A-Za-z0-9-]{10,}|AIza[0-9A-Za-z_-]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----)'
+
+found=0
+for f in $staged; do
+    # Skip this hook itself and the manifest docs, which name the patterns.
+    case "$f" in
+        .githooks/pre-commit) continue ;;
+    esac
+    [ -f "$f" ] || continue
+
+    hits=$(git diff --cached -U0 -- "$f" \
+        | grep -E '^\+' \
+        | grep -Ev '^\+\+\+' \
+        | grep -nE "$pattern" || true)
+
+    if [ -n "$hits" ]; then
+        if [ "$found" -eq 0 ]; then
+            printf '\n\033[31mpre-commit: possible secret in staged changes\033[0m\n\n' >&2
+            found=1
+        fi
+        printf '  %s:\n' "$f" >&2
+        printf '%s\n' "$hits" | sed 's/^/      /' >&2
+    fi
+done
+
+if [ "$found" -eq 1 ]; then
+    cat >&2 <<'EOF'
+
+Move the value into secrets.zsh (gitignored) and reference it by name.
+
+If this is a false positive:
+    git commit --no-verify
+
+EOF
+    exit 1
+fi
+
+exit 0

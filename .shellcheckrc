@@ -1,0 +1,5 @@
+# SC3043: `local` is not in POSIX, but every /bin/sh we actually target
+# supports it — dash (Debian/Ubuntu), bash (Rocky, macOS), busybox ash.
+# Writing these scripts without function-local variables would be far more
+# bug-prone than the portability risk it avoids.
+disable=SC3043
