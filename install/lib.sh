@@ -167,14 +167,26 @@ resolve_bin() {
     return 1
 }
 
-# tool_satisfied BINS MIN_VER -> true if installed and new enough
+# tool_satisfied BINS MIN_VER -> true if installed, runnable, and new enough
 tool_satisfied() {
     local bin ver
     bin=$(resolve_bin "$1") || return 1
+
+    # No declared minimum: presence is all we check.
     [ "$2" = '-' ] && return 0
+
     ver=$(bin_version "$bin")
-    # A binary that refuses to report a version still counts as present.
-    [ -n "$ver" ] || return 0
+
+    # A tool that declares a minimum but cannot report a version is broken,
+    # not merely quiet — so fail, and let the next tier replace it.
+    #
+    # This is not hypothetical: Rocky 8's EPEL neovim installs cleanly, puts
+    # a binary on PATH, EXITS ZERO, and prints only
+    #     E970: Failed to initialize lua interpreter
+    # Trusting exit status or mere presence would leave $EDITOR pointing at
+    # something that cannot open a file.
+    [ -n "$ver" ] || return 1
+
     ver_ge "$ver" "$2"
 }
 

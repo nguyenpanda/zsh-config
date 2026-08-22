@@ -15,6 +15,11 @@
 #            A distro package older than this is REJECTED and the installer
 #            falls through to the next tier. This is what rescues Rocky 8,
 #            whose EPEL fzf predates `fzf --zsh` (needs >= 0.48).
+#            Setting min_ver also makes the tool RUNNABILITY-checked: a
+#            binary that cannot report a version is treated as broken. Rocky
+#            8's EPEL neovim installs fine, exits 0, and prints only
+#            "E970: Failed to initialize lua interpreter" — only the version
+#            probe catches that, and it is why neovim declares a minimum.
 #   gh_repo  GitHub owner/repo for a prebuilt release binary
 #   gh_tag   exact release tag, or 'latest'. Pinned by default so installs are
 #            reproducible and the Docker matrix stays under GitHub's API rate
