@@ -5,15 +5,28 @@
 # Linux box.
 
 # --- zoxide (smarter cd) --------------------------------------------------
-# --cmd cd makes zoxide define `cd` itself (plus `cdi` for the interactive
-# picker). Do NOT go back to `alias cd='z'`: zoxide's z calls cd internally,
-# so on any zoxide build that calls plain `cd` rather than `builtin cd` the
-# alias points straight back at z and every cd dies with
+# Letting zoxide own `cd` is only safe on versions whose generated code uses
+# `builtin cd`. Older ones emit a plain `cd "$@"`, which under --cmd cd (or
+# the old `alias cd='z'`) calls straight back into itself, and every cd dies:
 #     z:1: maximum nested function level reached; increase FUNCNEST?
-# Debian 12's zoxide does exactly this. Ubuntu 24.04's does not, which is
-# what made the bug look platform-specific.
+#
+# Debian 12 ships zoxide 0.4.3, which does exactly this. Ubuntu 24.04 ships
+# 0.9.3, which is fine — that difference is what made the bug look
+# platform-specific rather than version-specific.
+#
+# manifests/tools.tsv sets min_ver 0.9 so the installer replaces an old
+# zoxide, but guard here too: a working `cd` must not depend on the installer
+# having run.
 if (( $+commands[zoxide] )); then
-    eval "$(zoxide init zsh --cmd cd)"
+    autoload -Uz is-at-least
+    _zoxide_ver="${$(zoxide --version 2>/dev/null)##* }"
+    if [[ -n "$_zoxide_ver" ]] && is-at-least 0.9 "$_zoxide_ver"; then
+        eval "$(zoxide init zsh --cmd cd)"
+    else
+        # Too old to own cd safely: provide `z` only and leave cd alone.
+        eval "$(zoxide init zsh)"
+    fi
+    unset _zoxide_ver
 fi
 
 # --- Python argcomplete ---------------------------------------------------

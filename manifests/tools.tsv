@@ -51,7 +51,7 @@ fd	fd,fdfind	fd	fd-find	fd-find	-	sharkdp/fd	v10.4.2	binary	fd-find
 bat	bat,batcat	bat	bat	bat	-	sharkdp/bat	v0.26.1	binary	-
 ripgrep	rg	ripgrep	ripgrep	ripgrep	-	BurntSushi/ripgrep	15.2.0	binary	ripgrep
 eza	eza	eza	eza	-	-	eza-community/eza	v0.23.5	binary	eza
-zoxide	zoxide	zoxide	zoxide	-	-	ajeetdsouza/zoxide	v0.10.0	binary	zoxide
+zoxide	zoxide	zoxide	zoxide	-	0.9	ajeetdsouza/zoxide	v0.10.0	binary	zoxide
 trash	trash,trash-put	trash	trash-cli	trash-cli	-	-	-	binary	-
 #
 # --- git power tools -------------------------------------------------------
