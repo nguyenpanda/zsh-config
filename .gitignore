@@ -1,24 +1,38 @@
-# Ignore all completion dumps and cache
-.zcompdump*
-.zcompdump-*
-.zsh-update
-.zcompdump.zwc
-.zsh_sessions/
-.zcompdump
+# ==========================================================================
+# Installer-managed plugin checkouts
+# Declared in manifests/plugins.tsv, cloned by install/20-plugins.sh.
+# Never tracked here: they are upstream repos, not our source.
+# ==========================================================================
+.oh-my-zsh/
+omz-custom/plugins/
+omz-custom/themes/
 
-# Ignore machine-specific files
-.p10k.zsh
-.p10k.zsh.bak
-.p10k.zsh.zwc
-
-# Ignore secret or local-only environment files
+# ==========================================================================
+# Machine-local overrides & secrets  (sourced last by .zshrc if present)
+# ==========================================================================
+local.zsh
+secrets.zsh
+p10k.local.zsh
 .env
 .local.zsh
 .local/
+.note/
 
-# macOS system files
-.DS_Store
-
-# Ignore any zsh-specific state or history (if stored here)
+# ==========================================================================
+# Completion dumps, caches and transient state
+# ==========================================================================
+.zcompdump
+.zcompdump*
+.zcompdump-*
+.zcompdump.zwc
+.zsh-update
+.zsh_sessions/
+.p10k.zsh.bak
+.p10k.zsh.zwc
 history
 .zsh_history
+
+# ==========================================================================
+# OS noise
+# ==========================================================================
+.DS_Store

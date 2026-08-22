@@ -1,0 +1,24 @@
+# Zsh plugin / theme manifest.
+#
+# Consumed by install/20-plugins.sh. Tab-separated. Blank lines and lines
+# starting with '#' are ignored.
+#
+#   url   dest                                       ref
+#
+# ref is a commit SHA, tag, or branch name.
+#
+#   - A SHA pins the checkout exactly and is what you want for plugins:
+#     every machine gets byte-identical behaviour.
+#   - `.oh-my-zsh` is deliberately tracked by BRANCH, not SHA. Oh My Zsh
+#     updates itself via `zstyle ':omz:update' mode auto` in lib/20-omz.zsh,
+#     so pinning it to a SHA would mean the installer and OMZ's own updater
+#     fight each other on every run. install/20-plugins.sh therefore only
+#     clones OMZ if missing and never force-resets it.
+#
+# To bump a plugin: change the ref here, then run `zsh-update --plugins`.
+
+url	dest	ref
+https://github.com/ohmyzsh/ohmyzsh.git	.oh-my-zsh	master
+https://github.com/romkatv/powerlevel10k.git	omz-custom/themes/powerlevel10k	3308262dfbd743b6e1d3956a2b5572f7a049d692
+https://github.com/zsh-users/zsh-autosuggestions.git	omz-custom/plugins/zsh-autosuggestions	85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5
+https://github.com/zsh-users/zsh-syntax-highlighting.git	omz-custom/plugins/zsh-syntax-highlighting	c4d95591843d49838b7ad30081e7aba3135a6703
