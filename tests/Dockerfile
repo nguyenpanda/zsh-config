@@ -19,11 +19,16 @@ ENV LANG=C.UTF-8 \
 #   util-linux  -> `script`, needed by smoke.zsh to get a pty
 #   procps      -> `free`, used by hw()
 #   findutils   -> `find`, used by the installer to locate extracted binaries
+#
+# `curl` is installed only if missing: RHEL 9 base images ship curl-minimal,
+# and asking for curl there is a conflicting request that aborts the whole
+# transaction with "cannot install the best candidate for the job".
 RUN set -eux; \
     if command -v dnf >/dev/null 2>&1; then \
         dnf install -y --setopt=install_weak_deps=False \
-            curl git tar gzip bzip2 unzip ca-certificates \
+            git tar gzip bzip2 unzip ca-certificates \
             findutils procps-ng util-linux which diffutils; \
+        command -v curl >/dev/null 2>&1 || dnf install -y curl; \
         dnf clean all; \
     elif command -v apt-get >/dev/null 2>&1; then \
         apt-get update; \

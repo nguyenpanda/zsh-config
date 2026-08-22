@@ -122,6 +122,14 @@ check "grep is NOT aliased to ripgrep" \
 check "code is a function, not a self-appending alias" \
       '(( $+functions[code] )) || ! (( $+aliases[code] ))'
 
+# Regression test: `alias cd=z` recursed infinitely on zoxide builds whose z
+# calls plain `cd` (Debian 12), breaking every single cd. Assert cd actually
+# changes directory rather than just existing.
+check_out "cd actually changes directory" \
+      'cd /tmp && print -r -- $PWD'
+check "cd is not aliased straight to z" \
+      '[[ ${aliases[cd]:-} != z ]]'
+
 # --------------------------------------------------------------------------
 print "\n\e[1m6. Custom commands\e[0m"
 check "hw() is defined"         '(( $+functions[hw] ))'
@@ -132,9 +140,12 @@ check "FD_OPTS is an array"     '[[ ${(t)FD_OPTS} == array* ]]'
 
 # --------------------------------------------------------------------------
 print "\n\e[1m7. Local override convention\e[0m"
-check "local.zsh is gitignored"   'cd $ZDOTDIR && git check-ignore -q local.zsh'
-check "secrets.zsh is gitignored" 'cd $ZDOTDIR && git check-ignore -q secrets.zsh'
-check "plugin dirs are gitignored" 'cd $ZDOTDIR && git check-ignore -q .oh-my-zsh'
+# `builtin cd`, not `cd`: zoxide provides cd, and a bug there must show up as
+# a cd failure in section 5 rather than three confusing gitignore failures.
+check "local.zsh is gitignored"    'builtin cd $ZDOTDIR && git check-ignore -q local.zsh'
+check "secrets.zsh is gitignored"  'builtin cd $ZDOTDIR && git check-ignore -q secrets.zsh'
+# Trailing-slash patterns only match real directories, so check a path inside.
+check "plugin dirs are gitignored" 'builtin cd $ZDOTDIR && git check-ignore -q .oh-my-zsh/oh-my-zsh.sh'
 
 # --------------------------------------------------------------------------
 print ""

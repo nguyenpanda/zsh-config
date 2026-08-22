@@ -25,7 +25,9 @@ else
 fi
 
 # --- Navigation -----------------------------------------------------------
-(( $+commands[zoxide] )) && alias cd='z'
+# `cd` is NOT aliased to z here — that recurses infinitely on some zoxide
+# builds. lib/40-tools.zsh runs `zoxide init zsh --cmd cd` instead, which is
+# the supported way to have zoxide provide cd.
 
 # --- Search ---------------------------------------------------------------
 # NOTE: `grep` is deliberately NOT aliased to rg. ripgrep does not accept

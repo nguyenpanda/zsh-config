@@ -5,8 +5,15 @@
 # Linux box.
 
 # --- zoxide (smarter cd) --------------------------------------------------
+# --cmd cd makes zoxide define `cd` itself (plus `cdi` for the interactive
+# picker). Do NOT go back to `alias cd='z'`: zoxide's z calls cd internally,
+# so on any zoxide build that calls plain `cd` rather than `builtin cd` the
+# alias points straight back at z and every cd dies with
+#     z:1: maximum nested function level reached; increase FUNCNEST?
+# Debian 12's zoxide does exactly this. Ubuntu 24.04's does not, which is
+# what made the bug look platform-specific.
 if (( $+commands[zoxide] )); then
-    eval "$(zoxide init zsh)"
+    eval "$(zoxide init zsh --cmd cd)"
 fi
 
 # --- Python argcomplete ---------------------------------------------------
