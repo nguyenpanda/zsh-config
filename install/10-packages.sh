@@ -49,8 +49,9 @@ install_one() {
                 INSTALLED="$INSTALLED $name"
                 return 0
             fi
-            # Present but too old — keep going.
-            warn "$name: $sys_pkg is older than $min_ver, trying a prebuilt binary"
+            # Installed, but either too old or too broken to report a
+            # version (see tool_satisfied). Either way, keep going.
+            warn "$name: $sys_pkg is unusable (older than $min_ver, or broken) — trying a prebuilt binary"
         fi
     fi
 
@@ -99,6 +100,8 @@ run_packages() {
         install_one "$name" "$bins" "$brew_p" "$apt_p" "$dnf_p" \
                     "$min_ver" "$gh_repo" "$gh_tag" "$layout" "$cargo_c" || true
     done < "$ZSH_SRC/manifests/tools.tsv"
+
+    [ -n "$INSTALLED" ] && log "installed:$INSTALLED"
 
     if [ -n "$FAILED" ]; then
         warn "could not install:$FAILED"
