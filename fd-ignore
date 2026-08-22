@@ -1,0 +1,56 @@
+# fd-ignore — paths fd and fzf should never descend into.
+#
+# gitignore syntax. Used via `fd --ignore-file "$ZDOTDIR/fd-ignore"`.
+#
+# This replaces the old FD_EXCLUDES variable, which joined an array of
+# "--exclude foo" strings into one scalar. That only ever worked where the
+# value was re-parsed by a shell (inside FZF_DEFAULT_COMMAND, or an `eval`):
+# zsh does not word-split unquoted parameters, so passing $FD_EXCLUDES
+# straight to fd sent it a single giant argument. A real ignore file has no
+# quoting or splitting problems at all.
+
+# --- OS & version control ---
+.git
+.DS_Store
+.Trash
+.Trashes
+.Spotlight-V100
+
+# --- dependencies & virtual environments ---
+node_modules
+.venv
+venv
+env
+
+# --- C/C++, CUDA & build output ---
+build
+out
+target
+cmake-build-*
+.clangd
+.ccls-cache
+.nv
+nsight-workspace
+
+# --- Python caches & build artifacts ---
+.cache
+__pycache__
+.pytest_cache
+.mypy_cache
+.ruff_cache
+*.egg-info
+
+# --- logs, temp files & infrastructure ---
+tmp
+temp
+logs
+*.log
+.docker
+
+# --- AI models & weights ---
+.ollama
+.huggingface
+
+# --- editors & IDEs ---
+.idea
+.vscode

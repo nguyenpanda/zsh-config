@@ -1,55 +1,18 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# ~/.config/zsh/.zshrc — interactive shell setup.
+#
+# This file is an orchestrator: the actual configuration lives in lib/, loaded
+# in filename order. The numeric prefixes ARE the load order, and it matters:
+# platform detection has to come first, Oh My Zsh has to load before our
+# aliases can override its own, and fzf needs the ignore list from 10-env.
+
+# Powerlevel10k's instant prompt must stay at the very top: it has to run
+# before anything that could write to stdout.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# ========== Oh My Zsh Configuration ==========
-export ZSH="$ZDOTDIR/.oh-my-zsh"
-export ZSH_CUSTOM="$ZDOTDIR/omz-custom"
-ZSH_THEME="powerlevel10k/powerlevel10k"
-
-# Move .zcompdump to cache directory
-export ZSH_COMPDUMP="$XDG_CACHE_HOME/zsh/zcompdump"
-
-# --- Plugins & Themes ---
-# Managed via Git Submodules
-
-# OMZ Settings
-zstyle ':omz:update' mode auto
-zstyle ':omz:update' frequency 7
-zstyle ':omz:plugins:ssh-agent' identities id_ed25519 id_rsa
-zstyle ':omz:plugins:ssh-agent' ssh-add-args --apple-load-keychain
-zstyle ':omz:plugins:ssh-agent' lifetime 8h
-
-# Case-sensitive completion
-CASE_SENSITIVE="true"
-ENABLE_CORRECTION="true"
-HIST_STAMPS="yyyy:mm:dd"
-
-# Plugins
-plugins=(
-  git
-  docker
-  docker-compose
-  # ssh-agent
-  extract
-
-  # Custom
-  zsh-autosuggestions
-  zsh-syntax-highlighting
-)
-
-# OS-Specific Plugins
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  plugins+=(macos)
-fi
-
-# Load Oh My Zsh
-source "$ZSH/oh-my-zsh.sh"
-
-# ========== Nguyenpanda Customizations ==========
-
-### History
+# ========== History =======================================================
+# Set before OMZ loads so its own defaults do not win.
 HISTFILE="$XDG_STATE_HOME/zsh/history"
 HISTSIZE=100000
 SAVEHIST=100000
@@ -61,22 +24,31 @@ setopt HIST_IGNORE_SPACE
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_FIND_NO_DUPS
 
-### Shell behaviour
+# ========== Shell behaviour ===============================================
 setopt AUTOCD
 setopt NOBEEP
 setopt NUMERIC_GLOB_SORT
 
-### Completion Styles (Applied after OMZ compinit)
+# ========== Modules =======================================================
+# (N) is nullglob: a missing or empty lib/ must not break the login shell.
+for _zshrc_part in "$ZDOTDIR"/lib/*.zsh(N); do
+    source "$_zshrc_part"
+done
+unset _zshrc_part
+
+# ========== Completion styles =============================================
+# After OMZ's compinit, or they get overwritten.
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
-### Load Custom Files
-source "$ZDOTDIR/env.zsh"
-source "$ZDOTDIR/aliases.zsh"
-source "$ZDOTDIR/tools.zsh"
-source "$ZDOTDIR/cmd.zsh"
-source "$ZDOTDIR/zsh_hook.zsh"
-source "$ZDOTDIR/fzf.zsh"
+# ========== Prompt ========================================================
+[[ -r "$ZDOTDIR/.p10k.zsh" ]]      && source "$ZDOTDIR/.p10k.zsh"
+# Per-machine prompt tweaks (gitignored) — e.g. a box without Nerd Fonts.
+[[ -r "$ZDOTDIR/p10k.local.zsh" ]] && source "$ZDOTDIR/p10k.local.zsh"
 
-# Powerlevel10k Theme (Must be after syntax highlighting or at least at the end)
-[[ ! -f "$ZDOTDIR/.p10k.zsh" ]] || source "$ZDOTDIR/.p10k.zsh"
+# ========== Machine-local overrides =======================================
+# Both gitignored. Sourced last so they can override anything above.
+[[ -r "$ZDOTDIR/local.zsh" ]]   && source "$ZDOTDIR/local.zsh"
+[[ -r "$ZDOTDIR/secrets.zsh" ]] && source "$ZDOTDIR/secrets.zsh"
+
+true  # never let the last conditional set a non-zero exit status

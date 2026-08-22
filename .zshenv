@@ -1,74 +1,75 @@
-# ~/.config/zsh/.zshenv
-# /etc/zshenv will run before this script
+# ~/.config/zsh/.zshenv — runs for every zsh, interactive or not.
+#
+# Reached either via the ~/.zshenv stub written by install/30-link.sh, or via
+# a legacy /etc/zshenv that sets ZDOTDIR. Keep this file cheap and free of
+# output: it runs for every `zsh -c` and every scp/rsync session.
 
-# ========== XDG base directories ==========
-# Centralizes config/cache/data locations
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_CACHE_HOME="$HOME/.cache"
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_STATE_HOME="$HOME/.local/state"
+# ========== XDG base directories ==========================================
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 
-# Define Zsh config directory
-export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+export ZDOTDIR="${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}"
 
 [[ -d "$XDG_CACHE_HOME/zsh" ]] || mkdir -p "$XDG_CACHE_HOME/zsh"
 [[ -d "$XDG_STATE_HOME/zsh" ]] || mkdir -p "$XDG_STATE_HOME/zsh"
 
-# ========== Editor & Pager ==========
-export EDITOR="nvim"
-export VISUAL="nvim"
+# ========== PATH ==========================================================
+# Must come before anything that probes $commands: tools installed by
+# install/10-packages.sh live in ~/.local/bin, and the lookups below would
+# miss them if PATH were still the system default.
+typeset -U path
+path=(
+    "$HOME/bin"
+    "$HOME/.local/bin"
+    "$HOME/.cargo/bin"
+    "/usr/local/bin"
+    "/usr/local/sbin"
+    $path
+)
 
-if command -v bat >/dev/null 2>&1; then
-  export MANPAGER="bat -l man -p"
-elif command -v batcat >/dev/null 2>&1; then
-  export MANPAGER="batcat -l man -p"
-fi
-
-# ========== GPG ==========
-export GPG_TTY=$(tty)
-
-# ========== Path & FPath ==========
-if [[ -n "$ZSH_VERSION" ]]; then
-    typeset -U path
-    path=(
-        "$HOME/bin"
-        "$HOME/.local/bin"
-        "$HOME/.cargo/bin"
-        "/usr/local/bin"
-        "/usr/local/sbin"
-        "$HOME/.lmstudio/bin"
-        $path
-    )
-    
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        path=(
-            "/opt/homebrew/bin"
-            "/opt/homebrew/sbin"
-            "/opt/homebrew/opt/llvm/bin"
-            $path
-        )
-    elif [[ -d "/home/linuxbrew/.linuxbrew" ]]; then
-        path=(
-            "/home/linuxbrew/.linuxbrew/bin"
-            "/home/linuxbrew/.linuxbrew/sbin"
-            $path
-        )
+# Homebrew: /opt/homebrew on Apple Silicon, /usr/local on Intel,
+# /home/linuxbrew on Linux. Probe rather than hardcode.
+for _brew_root in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+    if [[ -x "$_brew_root/bin/brew" ]]; then
+        path=("$_brew_root/bin" "$_brew_root/sbin" $path)
+        [[ -d "$_brew_root/opt/llvm/bin" ]] && path=("$_brew_root/opt/llvm/bin" $path)
+        break
     fi
+done
+unset _brew_root
 
-    typeset -U fpath
-    fpath=(
-        "$HOME/.docker/completions"
-        $fpath
-    )
+typeset -U fpath
+fpath=(
+    "$HOME/.docker/completions"
+    $fpath
+)
+
+# Machine-specific PATH entries belong in local.zsh (gitignored), not here.
+
+# ========== Editor & pager ================================================
+if (( $+commands[nvim] )); then
+    export EDITOR="nvim"
+    export VISUAL="nvim"
+elif (( $+commands[vim] )); then
+    export EDITOR="vim"
+    export VISUAL="vim"
 else
-    export PATH="$HOME/bin:$HOME/.local/bin:$HOME/.cargo/bin:/usr/local/bin:/usr/local/sbin:$HOME/.lmstudio/bin:$PATH"
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/llvm/bin:$PATH"
-    elif [[ -d "/home/linuxbrew/.linuxbrew" ]]; then
-        export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
-    fi
+    export EDITOR="vi"
+    export VISUAL="vi"
 fi
 
-if [[ -f "$HOME/.local/bin/env" ]]; then
-    . "$HOME/.local/bin/env"
+# Debian and Ubuntu ship bat as `batcat`.
+if (( $+commands[bat] )); then
+    export MANPAGER="bat -l man -p"
+elif (( $+commands[batcat] )); then
+    export MANPAGER="batcat -l man -p"
+fi
+
+# ========== GPG ===========================================================
+# Only meaningful with a terminal attached, and the old `$(tty)` cost a fork
+# in every non-interactive shell. $TTY is set by zsh itself, for free.
+if [[ -o interactive ]]; then
+    export GPG_TTY="$TTY"
 fi
