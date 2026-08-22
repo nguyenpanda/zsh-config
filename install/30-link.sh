@@ -84,6 +84,13 @@ set_login_shell() {
 install_git_hooks() {
     have git || return 0
     [ -d "$ZSH_SRC/.git" ] || return 0
+
+    # Report only a real change, so a second run is visibly a no-op.
+    if [ "$(git -C "$ZSH_SRC" config --get core.hooksPath 2>/dev/null)" = .githooks ]; then
+        skip "pre-commit secret guard already enabled"
+        return 0
+    fi
+
     git -C "$ZSH_SRC" config core.hooksPath .githooks
     ok "enabled the pre-commit secret guard (.githooks)"
 }
